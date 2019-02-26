@@ -96,7 +96,7 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment
         mCancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Fingerprint.onCancelled();
+                Fingerprint.onCancelled(null);
                 dismissAllowingStateLoss();
             }
         });
@@ -110,7 +110,7 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment
         mSecondDialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                goToBackup();
+                goToBackup(null);
             }
         });
         int fingerprint_container_id = getResources()
@@ -133,7 +133,7 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment
         // If fingerprint authentication is not available, switch immediately to the backup
         // (password) screen.
         if (!mFingerprintUiHelper.isFingerprintAuthAvailable()) {
-            goToBackup();
+            goToBackup(null);
         }
         return v;
     }
@@ -231,7 +231,7 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment
             } else {
                 // The user canceled or didn’t complete the lock screen
                 // operation. Go to error/cancellation flow.
-                Fingerprint.onCancelled();
+                Fingerprint.onCancelled(null);
             }
             dismissAllowingStateLoss();
         }
@@ -254,7 +254,7 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment
     @Override
     public void onCancel(DialogInterface dialog) {
         super.onCancel(dialog);
-        Fingerprint.onCancelled();
+        Fingerprint.onCancelled(null);
     }
 
     /**

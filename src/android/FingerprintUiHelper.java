@@ -106,7 +106,7 @@ public class FingerprintUiHelper extends FingerprintManager.AuthenticationCallba
     public void onAuthenticationError(int errMsgId, CharSequence errString) {
         if (!mSelfCancelled) {
             showError(errString);
-            mCallback.onError(errorString.toString());
+            mCallback.onError(errString.toString());
         }
     }
 
