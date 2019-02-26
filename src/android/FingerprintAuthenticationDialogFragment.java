@@ -169,10 +169,10 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment
      * available or the user chooses to use the password authentication method by pressing the
      * button. This can also happen when the user had too many fingerprint attempts.
      */
-    private void goToBackup() {
+    private void goToBackup(String errorMessage) {
         if(disableBackup)
         {
-            Fingerprint.onCancelled(); 
+            Fingerprint.onCancelled(errorMessage); 
             dismissAllowingStateLoss();
         }
         else{
@@ -246,9 +246,9 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment
     }
 
     @Override
-    public void onError() {
+    public void onError(String errorMessage) {
         if(this.getActivity() != null)
-            goToBackup();
+            goToBackup(errorMessage);
     }
 
     @Override
