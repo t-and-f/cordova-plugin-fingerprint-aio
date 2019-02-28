@@ -70,7 +70,7 @@ public class Fingerprint extends CordovaPlugin {
     private static final String ANDROID_KEY_STORE = "AndroidKeyStore";
 
     KeyguardManager mKeyguardManager;
-    FingerprintAuthenticationDialogFragment mFragment;
+    // FingerprintAuthenticationDialogFragment mFragment;
     public static KeyStore mKeyStore;
     public static KeyGenerator mKeyGenerator;
     public static Cipher mCipher;
@@ -204,7 +204,8 @@ public class Fingerprint extends CordovaPlugin {
                         public void run() {
                             // Set up the crypto object for later. The object will be authenticated by use
                             // of the fingerprint.
-                            mFragment = new FingerprintAuthenticationDialogFragment();
+
+                            FingerprintAuthenticationDialogFragment mFragment = new FingerprintAuthenticationDialogFragment();
                             Bundle bundle = new Bundle();
                             bundle.putBoolean("disableBackup", mDisableBackup);
                             mFragment.setArguments(bundle);

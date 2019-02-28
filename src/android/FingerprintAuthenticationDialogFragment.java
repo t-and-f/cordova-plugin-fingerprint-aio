@@ -144,9 +144,6 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment
     @Override
     public void onResume() {
         super.onResume();
-        /* if (mStage == Stage.FINGERPRINT) {
-            mFingerprintUiHelper.startListening(mCryptoObject);
-        } */
     }
 
     public void setStage(Stage stage) {
@@ -156,6 +153,7 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment
     @Override
     public void onPause() {
         super.onPause();
+        dismissAllowingStateLoss();
     }
 
     @Override
