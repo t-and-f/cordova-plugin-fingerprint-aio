@@ -96,7 +96,7 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment
         mCancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Fingerprint.onCancelled(null);
+                Fingerprint.onCancelled();
                 dismissAllowingStateLoss();
             }
         });
@@ -110,7 +110,7 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment
         mSecondDialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                goToBackup(null);
+                goToBackup();
             }
         });
         int fingerprint_container_id = getResources()
@@ -133,7 +133,9 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment
         // If fingerprint authentication is not available, switch immediately to the backup
         // (password) screen.
         if (!mFingerprintUiHelper.isFingerprintAuthAvailable()) {
-            goToBackup(null);
+            goToBackup();
+        } else {
+          mFingerprintUiHelper.startListening(mCryptoObject);
         }
         return v;
     }
@@ -142,9 +144,9 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment
     @Override
     public void onResume() {
         super.onResume();
-        if (mStage == Stage.FINGERPRINT) {
+        /* if (mStage == Stage.FINGERPRINT) {
             mFingerprintUiHelper.startListening(mCryptoObject);
-        }
+        } */
     }
 
     public void setStage(Stage stage) {
@@ -154,6 +156,11 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment
     @Override
     public void onPause() {
         super.onPause();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
         mFingerprintUiHelper.stopListening();
     }
 
@@ -169,10 +176,10 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment
      * available or the user chooses to use the password authentication method by pressing the
      * button. This can also happen when the user had too many fingerprint attempts.
      */
-    private void goToBackup(String errorMessage) {
+    private void goToBackup() {
         if(disableBackup)
         {
-            Fingerprint.onCancelled(errorMessage); 
+            Fingerprint.onCancelled();
             dismissAllowingStateLoss();
         }
         else{
@@ -231,7 +238,7 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment
             } else {
                 // The user canceled or didn’t complete the lock screen
                 // operation. Go to error/cancellation flow.
-                Fingerprint.onCancelled(null);
+                Fingerprint.onCancelled();
             }
             dismissAllowingStateLoss();
         }
@@ -246,15 +253,15 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment
     }
 
     @Override
-    public void onError(String errorMessage) {
+    public void onError() {
         if(this.getActivity() != null)
-            goToBackup(errorMessage);
+            goToBackup();
     }
 
     @Override
     public void onCancel(DialogInterface dialog) {
         super.onCancel(dialog);
-        Fingerprint.onCancelled(null);
+        Fingerprint.onCancelled();
     }
 
     /**

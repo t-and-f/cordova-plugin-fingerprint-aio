@@ -42,6 +42,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.KeyStore;
@@ -288,7 +289,7 @@ public class Fingerprint extends CordovaPlugin {
             initCipher = true;
         } catch (InvalidKeyException e) {
             errorMessage = initCipherExceptionErrorPrefix + "InvalidKeyException: " + e.toString();
-            
+
         }
         if (!initCipher) {
             Log.e(TAG, errorMessage);
@@ -396,14 +397,18 @@ public class Fingerprint extends CordovaPlugin {
         } catch (BadPaddingException e) {
             errorMessage = "Failed to encrypt the data with the generated key:" +
                     " BadPaddingException:  " + e.getMessage();
-            Log.e(TAG, errorMessage);
+            Log.e(TAG, errorMessage, e);
         } catch (IllegalBlockSizeException e) {
             errorMessage = "Failed to encrypt the data with the generated key: " +
                     "IllegalBlockSizeException: " + e.getMessage();
-            Log.e(TAG, errorMessage);
+            Log.e(TAG, errorMessage, e);
+        } catch (UnsupportedEncodingException e) {
+            errorMessage = "Failed to encrypt the data with the generated key: " +
+                    "UnsupportedEncodingException: " + e.getMessage();
+            Log.e(TAG, errorMessage, e);
         } catch (JSONException e) {
             errorMessage = "Failed to set resultJson key value pair: " + e.getMessage();
-            Log.e(TAG, errorMessage);
+            Log.e(TAG, errorMessage, e);
         }
 
         if (createdResultJson) {
@@ -416,16 +421,16 @@ public class Fingerprint extends CordovaPlugin {
         mCallbackContext.sendPluginResult(mPluginResult);
     }
 
-    public static void onCancelled(String errorMessage) {
-        mCallbackContext.error(errorMessage != null ? errorMessage : "Cancelled");
+    public static void onCancelled() {
+        mCallbackContext.error("Cancelled");
     }
 
     /**
      * Tries to encrypt some data with the generated key in {@link #createKey} which is
      * only works if the user has just authenticated via fingerprint.
      */
-    private static byte[] tryEncrypt() throws BadPaddingException, IllegalBlockSizeException {
-        return mCipher.doFinal(mClientSecret.getBytes());
+    private static byte[] tryEncrypt() throws BadPaddingException, IllegalBlockSizeException, UnsupportedEncodingException {
+        return mCipher.doFinal(mClientSecret.getBytes("utf-8"));
     }
 
     public static boolean setPluginResultError(String errorMessage) {
