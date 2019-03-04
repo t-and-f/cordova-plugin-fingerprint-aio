@@ -96,7 +96,7 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment
         mCancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Fingerprint.onCancelled();
+                Fingerprint.onCancelled("User");
                 dismissAllowingStateLoss();
             }
         });
