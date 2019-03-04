@@ -45,6 +45,7 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment
     private static final String TAG = "FingerprintAuthDialog";
     private static final int REQUEST_CODE_CONFIRM_DEVICE_CREDENTIALS = 1;
 
+    private int errorCount = 0;
     private Button mCancelButton;
     private Button mSecondDialogButton;
     private View mFingerprintContent;
@@ -110,7 +111,7 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment
         mSecondDialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                goToBackup();
+                goToBackup("SeconDialogClick");
             }
         });
         int fingerprint_container_id = getResources()
@@ -133,7 +134,7 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment
         // If fingerprint authentication is not available, switch immediately to the backup
         // (password) screen.
         if (!mFingerprintUiHelper.isFingerprintAuthAvailable()) {
-            goToBackup();
+            goToBackup("FingerprintUnavailable");
         } else {
           mFingerprintUiHelper.startListening(mCryptoObject);
         }
@@ -153,7 +154,6 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment
     @Override
     public void onPause() {
         super.onPause();
-        dismissAllowingStateLoss();
     }
 
     @Override
@@ -174,10 +174,10 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment
      * available or the user chooses to use the password authentication method by pressing the
      * button. This can also happen when the user had too many fingerprint attempts.
      */
-    private void goToBackup() {
+    private void goToBackup(String error) {
         if(disableBackup)
         {
-            Fingerprint.onCancelled("Backup");
+            Fingerprint.onCancelled(error);
             dismissAllowingStateLoss();
         }
         else{
@@ -251,9 +251,15 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment
     }
 
     @Override
-    public void onError() {
-        if(this.getActivity() != null)
-            goToBackup();
+    public void onError(String error) {
+        if(this.getActivity() != null) {
+            if (errorCount < 3) {
+                setStage(Stage.FINGERPRINT);
+                updateStage();
+            } else {
+                goToBackup(error);
+            }
+        }
     }
 
     @Override
