@@ -32,7 +32,7 @@ import android.widget.TextView;
 public class FingerprintUiHelper extends FingerprintManager.AuthenticationCallback {
 
     static final long ERROR_TIMEOUT_MILLIS = 1600;
-    static final long SUCCESS_DELAY_MILLIS = 1300;
+    static final long SUCCESS_DELAY_MILLIS = 0;
 
     private final Context mContext;
     private final FingerprintManager mFingerprintManager;
@@ -109,7 +109,7 @@ public class FingerprintUiHelper extends FingerprintManager.AuthenticationCallba
             mIcon.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    mCallback.onError();
+                    mCallback.onError(errString.toString());
                 }
             }, ERROR_TIMEOUT_MILLIS);
         }
@@ -184,6 +184,6 @@ public class FingerprintUiHelper extends FingerprintManager.AuthenticationCallba
 
         void onAuthenticated();
 
-        void onError();
+        void onError(String error);
     }
 }
