@@ -177,7 +177,7 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment
     private void goToBackup() {
         if(disableBackup)
         {
-            Fingerprint.onCancelled("Backup method requested");
+            Fingerprint.onCancelled("Backup");
             dismissAllowingStateLoss();
         }
         else{
