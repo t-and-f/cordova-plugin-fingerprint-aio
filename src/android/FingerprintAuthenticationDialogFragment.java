@@ -154,7 +154,10 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment
     @Override
     public void onPause() {
         super.onPause();
-        mFingerprintUiHelper.stopListening();
+        dismissAllowingStateLoss();
+        if (mStage == Stage.FINGERPRINT) {
+            mFingerprintUiHelper.stopListening();
+        }
     }
 
     /**
@@ -172,7 +175,7 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment
     private void goToBackup(String errorMessage) {
         if(disableBackup)
         {
-            Fingerprint.onCancelled(errorMessage); 
+            Fingerprint.onCancelled(errorMessage);
             dismissAllowingStateLoss();
         }
         else{

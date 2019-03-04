@@ -203,6 +203,9 @@ public class Fingerprint extends CordovaPlugin {
                         public void run() {
                             // Set up the crypto object for later. The object will be authenticated by use
                             // of the fingerprint.
+                            if (mFragment != null) {
+                                mFragment.dismissAllowingStateLoss();
+                            }
                             mFragment = new FingerprintAuthenticationDialogFragment();
                             Bundle bundle = new Bundle();
                             bundle.putBoolean("disableBackup", mDisableBackup);
@@ -288,7 +291,7 @@ public class Fingerprint extends CordovaPlugin {
             initCipher = true;
         } catch (InvalidKeyException e) {
             errorMessage = initCipherExceptionErrorPrefix + "InvalidKeyException: " + e.toString();
-            
+
         }
         if (!initCipher) {
             Log.e(TAG, errorMessage);
