@@ -422,8 +422,8 @@ public class Fingerprint extends CordovaPlugin {
         mCallbackContext.sendPluginResult(mPluginResult);
     }
 
-    public static void onCancelled() {
-        mCallbackContext.error("Cancelled");
+    public static void onCancelled(String reason) {
+        mCallbackContext.error(reason == null ? "Cancelled" : reason);
     }
 
     /**

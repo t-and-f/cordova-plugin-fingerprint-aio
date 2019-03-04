@@ -177,7 +177,7 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment
     private void goToBackup() {
         if(disableBackup)
         {
-            Fingerprint.onCancelled();
+            Fingerprint.onCancelled("Backup method requested");
             dismissAllowingStateLoss();
         }
         else{
@@ -236,7 +236,7 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment
             } else {
                 // The user canceled or didn’t complete the lock screen
                 // operation. Go to error/cancellation flow.
-                Fingerprint.onCancelled();
+                Fingerprint.onCancelled("User");
             }
             dismissAllowingStateLoss();
         }
@@ -259,7 +259,7 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment
     @Override
     public void onCancel(DialogInterface dialog) {
         super.onCancel(dialog);
-        Fingerprint.onCancelled();
+        Fingerprint.onCancelled("User");
     }
 
     /**
